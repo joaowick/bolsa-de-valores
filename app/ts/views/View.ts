@@ -1,6 +1,6 @@
-abstract class View<T> {
+export abstract class View<T> {
 
-    private _elemento: JQuery;
+    protected _elemento: JQuery;
 
     constructor(seletor: string) {
 
