@@ -1,4 +1,4 @@
-import { logarTempoDeExecucao } from '../helpers/decorators/logarTempoDeExecucao'
+import { logarTempoDeExecucao } from '../helpers/decorators/index'
 
 export abstract class View<T> {
 
@@ -10,7 +10,7 @@ export abstract class View<T> {
         this._escapar = escapar
     }
 
-    @logarTempoDeExecucao()
+    @logarTempoDeExecucao(true)
     update(model: T) {
         let template = this.template(model)
         if(this._escapar) {

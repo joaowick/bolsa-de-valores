@@ -1,4 +1,4 @@
-System.register(["../helpers/decorators/logarTempoDeExecucao"], function (exports_1, context_1) {
+System.register(["../helpers/decorators/index"], function (exports_1, context_1) {
     "use strict";
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -7,11 +7,11 @@ System.register(["../helpers/decorators/logarTempoDeExecucao"], function (export
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     };
     var __moduleName = context_1 && context_1.id;
-    var logarTempoDeExecucao_1, View;
+    var index_1, View;
     return {
         setters: [
-            function (logarTempoDeExecucao_1_1) {
-                logarTempoDeExecucao_1 = logarTempoDeExecucao_1_1;
+            function (index_1_1) {
+                index_1 = index_1_1;
             }
         ],
         execute: function () {
@@ -29,7 +29,7 @@ System.register(["../helpers/decorators/logarTempoDeExecucao"], function (export
                 }
             };
             __decorate([
-                logarTempoDeExecucao_1.logarTempoDeExecucao()
+                index_1.logarTempoDeExecucao(true)
             ], View.prototype, "update", null);
             exports_1("View", View);
         }
