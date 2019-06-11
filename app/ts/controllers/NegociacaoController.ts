@@ -1,6 +1,9 @@
 import { NegociacoesView, MensagemView } from '../views/index';
-import { Negociacoes, Negociacao } from '../models/index';
-import { domInject } from '../helpers/decorators/index'
+import { Negociacoes, Negociacao, NegociacaoParcial } from '../models/index';
+import { domInject, throttle } from '../helpers/decorators/index'
+import { NegociacaoService } from '../services/index';
+
+let timer = 0;
 
 export class NegociacaoController {
 
@@ -16,6 +19,7 @@ export class NegociacaoController {
     private _negocicacoes = new Negociacoes()
     private _negociacoesView = new NegociacoesView('#negociacoesView')
     private _mensagemView = new MensagemView('#mensagemView')
+    private _service = new NegociacaoService();
 
     constructor() {
         this._negociacoesView.update(this._negocicacoes)
@@ -27,7 +31,7 @@ export class NegociacaoController {
 
         let data = new Date(this._inputData.val().replace(/-/g, ','));
 
-        if(data.getDay() == DiaDaSemana.Sabado || data.getDay() == DiaDaSemana.Domingo) {
+        if (data.getDay() == DiaDaSemana.Sabado || data.getDay() == DiaDaSemana.Domingo) {
             this._mensagemView.update('Somente negociações em dias úteis');
             return
         }
@@ -44,9 +48,27 @@ export class NegociacaoController {
         this._mensagemView.update('Negociação adicionada com sucesso')
     }
 
+    @throttle()
+    importaDados() {
+        this._service
+            .obterNegociacoes(res => {
+                if (res.ok) {
+                    return res
+                } else {
+                    throw new Error(res.statusText)
+                }
+            })
+            .then((negociacoes: Negociacao[]) => {
+                negociacoes.forEach(negociacao =>
+                    this._negocicacoes.adiciona(negociacao));
+                this._negociacoesView.update(this._negocicacoes);
+            })
+    }
+
     private _EhDiaUtil(data: Date) {
         return data.getDay() != DiaDaSemana.Sabado && data.getDay() != DiaDaSemana.Domingo
     }
+
 }
 
 enum DiaDaSemana {
