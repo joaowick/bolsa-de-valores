@@ -1,4 +1,8 @@
-export class Negociacao {
+import { Imprimivel } from "./Imprimivel";
+import { Igualavel } from "./Igualavel";
+import { MeuObjeto } from "./MeuObjeto";
+
+export class Negociacao implements MeuObjeto<Negociacao> {
 
     constructor(readonly data: Date, readonly quantidade: number, readonly valor: number) { }
 
@@ -14,5 +18,11 @@ export class Negociacao {
             Valor: ${this.valor},
             Volume: ${this.volume}`
         )
+    }
+
+    ehIgual(negociacao: Negociacao): boolean {
+        return this.data.getDate() == negociacao.data.getDate() 
+            && this.data.getMonth() == negociacao.data.getMonth()
+            && this.data.getFullYear() == negociacao.data.getFullYear()
     }
 }
