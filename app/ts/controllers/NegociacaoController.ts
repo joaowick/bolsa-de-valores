@@ -50,28 +50,27 @@ export class NegociacaoController {
     }
 
     @throttle()
-    importaDados() {
-        this._service
-            .obterNegociacoes(res => {
-                if (res.ok) {
-                    return res
-                } else {
-                    throw new Error(res.statusText)
-                }
-            })
-            .then((negociacoesParaImportar: Negociacao[]) => {
-                const negociacoesJaImportadas = this._negocicacoes.paraArray();
-                negociacoesParaImportar
-                    .filter(negociacao =>
-                        !negociacoesJaImportadas.some(jaImportada =>
-                            negociacao.ehIgual(jaImportada)))
-                    .forEach(negociacao =>
-                        this._negocicacoes.adiciona(negociacao));
-                this._negociacoesView.update(this._negocicacoes);
-            })
-            .catch(err => {
-                this._mensagemView.update(err.message)
-            })
+    async importaDados() {
+        try {
+            const negociacoesParaImportar = await this._service
+                .obterNegociacoes(res => {
+                    if (res.ok) {
+                        return res
+                    } else {
+                        throw new Error(res.statusText)
+                    }
+                });
+            const negociacoesJaImportadas = this._negocicacoes.paraArray();
+            negociacoesParaImportar
+                .filter(negociacao =>
+                    !negociacoesJaImportadas.some(jaImportada =>
+                        negociacao.ehIgual(jaImportada)))
+                .forEach(negociacao =>
+                    this._negocicacoes.adiciona(negociacao));
+            this._negociacoesView.update(this._negocicacoes);
+        } catch (err) {
+            this._mensagemView.update(err.message);
+        }
     }
 
     private _EhDiaUtil(data: Date) {
